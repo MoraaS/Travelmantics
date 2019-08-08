@@ -1,6 +1,7 @@
 package com.example.travelmantics;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,7 +94,8 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
         return deals.size();
     }
 
-    public class DealViewHolder extends RecyclerView.ViewHolder{
+    public class DealViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener {
         TextView txtTitle;
         TextView txtDescription;
         TextView txtPrice;
@@ -103,6 +105,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             txtTitle=(TextView) itemView.findViewById(R.id.txtTitle);
             txtDescription=(TextView)itemView.findViewById(R.id.txtDescription);
             txtPrice=(TextView)itemView.findViewById(R.id.txtPrice);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(TravelDeal deal){
@@ -110,6 +113,24 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             txtDescription.setText(deal.getDescription());
             txtPrice.setText(deal.getPrice());
 
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            //getting position of item clicked
+            int position = getAdapterPosition();
+            Log.wtf("Click", String.valueOf(position));
+
+            //find the selected travel deal using position
+            TravelDeal selectedDeal = deals.get(position);
+
+            //intent to call the deal activity class that will help in editing
+            Intent intent = new Intent(view.getContext(), DealActivity.class);
+
+            //Passing a complex class as an extra; TravelDeal is implements serializable to allow this
+            intent.putExtra("Deal", selectedDeal);
+            view.getContext().startActivity(intent);
         }
     }
 }

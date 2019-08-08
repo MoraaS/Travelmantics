@@ -18,10 +18,10 @@ import java.util.List;
 public  class FirebaseUtil {
     public static FirebaseDatabase mFirebaseDatabase;
     public static DatabaseReference mDatabaseReference;
-    public static FirebaseAuth.AuthStateListener mAuthListener;
-    public static FirebaseAuth mFirebaseAuth;
-    private static final int RC_SIGN_IN=123;
     private static FirebaseUtil firebaseUtil;
+    public static FirebaseAuth mFirebaseAuth;
+    public static FirebaseAuth.AuthStateListener mAuthListener;
+    private static final int RC_SIGN_IN=123;
     public static ArrayList<TravelDeal> mDeals;
     private static Activity caller;
 
@@ -31,27 +31,33 @@ public  class FirebaseUtil {
     //generic static method that will open ref of child, incase method has been called nothing happens
     //initialization of the firebase variables
     //the openFbReference takes an activity so it will be called in the ListActivity
-    public static void openFbReference(String ref, final ListActivity callerActivity) {
+    public static void openFbReference(String ref, final Activity callerActivity) {
         if (firebaseUtil == null) {
             firebaseUtil = new FirebaseUtil();
             mFirebaseDatabase = FirebaseDatabase.getInstance();
-            mFirebaseAuth=FirebaseAuth.getInstance();
-            caller= callerActivity;
-            mAuthListener=new FirebaseAuth.AuthStateListener() {
+            mFirebaseAuth = FirebaseAuth.getInstance();
+            caller = callerActivity;
+
+            mAuthListener = new FirebaseAuth.AuthStateListener() {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                    FirebaseUtil.signIn();
+
+                    //a control to check if there is a logged user
+                    if (firebaseAuth.getCurrentUser()==null) {
+                        FirebaseUtil.signIn();
+                    }
                     Toast.makeText(callerActivity.getBaseContext(), "Welcome Back", Toast.LENGTH_LONG).show();
 
                 }
 
             };
+        }
             mDeals = new ArrayList<TravelDeal>();
             mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
-        }
+
 
     }
-    public static void signIn(){
+    private static void signIn(){
         //From the firebase UI
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
