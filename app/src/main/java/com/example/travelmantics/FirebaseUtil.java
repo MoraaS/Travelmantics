@@ -20,7 +20,7 @@ public  class FirebaseUtil {
     public static DatabaseReference mDatabaseReference;
     public static FirebaseAuth.AuthStateListener mAuthListener;
     public static FirebaseAuth mFirebaseAuth;
-    public static final int RC_SIGN_IN=123;
+    private static final int RC_SIGN_IN=123;
     private static FirebaseUtil firebaseUtil;
     public static ArrayList<TravelDeal> mDeals;
     private static Activity caller;
@@ -47,8 +47,9 @@ public  class FirebaseUtil {
 
             };
             mDeals = new ArrayList<TravelDeal>();
+            mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
         }
-        mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
+
     }
     public static void signIn(){
         //From the firebase UI

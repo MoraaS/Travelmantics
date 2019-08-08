@@ -28,8 +28,10 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
         //add the activity when calling openFbRef method
         FirebaseUtil.openFbReference("traveldeals", this);
+
         //reference to the recycler view
         RecyclerView rvDeals = (RecyclerView) findViewById(R.id.rvDeals);
         final DealAdapter adapter = new DealAdapter();
@@ -67,7 +69,7 @@ public class ListActivity extends AppCompatActivity {
         FirebaseUtil.attachListener();
     }
 
-//    public void showMenu() {
-//        invalidateOptionsMenu();
-//    }
+    public void showMenu() {
+        invalidateOptionsMenu();
+    }
 }
