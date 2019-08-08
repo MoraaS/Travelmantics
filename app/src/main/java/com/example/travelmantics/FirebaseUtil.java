@@ -31,7 +31,7 @@ public  class FirebaseUtil {
     //generic static method that will open ref of child, incase method has been called nothing happens
     //initialization of the firebase variables
     //the openFbReference takes an activity so it will be called in the ListActivity
-    public static void openFbReference(String ref, final Activity callerActivity) {
+    public static void openFbReference(String ref, final ListActivity callerActivity) {
         if (firebaseUtil == null) {
             firebaseUtil = new FirebaseUtil();
             mFirebaseDatabase = FirebaseDatabase.getInstance();

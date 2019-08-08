@@ -29,15 +29,6 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        //add the activity when calling openFbRef method
-        FirebaseUtil.openFbReference("traveldeals", this);
-
-        //reference to the recycler view
-        RecyclerView rvDeals = (RecyclerView) findViewById(R.id.rvDeals);
-        final DealAdapter adapter = new DealAdapter();
-        rvDeals.setAdapter(adapter);
-        LinearLayoutManager dealsLayoutManager= new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        rvDeals.setLayoutManager(dealsLayoutManager);
     }
     //including the list activity menu in project
     @Override
@@ -66,9 +57,21 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        //Responsible for displaying travel deals
+
+        //add the activity when calling openFbRef method
+        FirebaseUtil.openFbReference("traveldeals", this);
+
+        //reference to the recycler view
+        RecyclerView rvDeals = (RecyclerView) findViewById(R.id.rvDeals);
+        final DealAdapter adapter = new DealAdapter();
+        rvDeals.setAdapter(adapter);
+        LinearLayoutManager dealsLayoutManager=
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rvDeals.setLayoutManager(dealsLayoutManager);
         FirebaseUtil.attachListener();
     }
-
     public void showMenu() {
         invalidateOptionsMenu();
     }
