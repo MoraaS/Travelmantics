@@ -128,7 +128,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             //intent to call the deal activity class that will help in editing
             Intent intent = new Intent(view.getContext(), DealActivity.class);
 
-            //Passing a complex class as an extra; TravelDeal is implements serializable to allow this
+            //Passing a complex class as an extra; TravelDeal implements serializable interface
             intent.putExtra("Deal", selectedDeal);
             view.getContext().startActivity(intent);
         }

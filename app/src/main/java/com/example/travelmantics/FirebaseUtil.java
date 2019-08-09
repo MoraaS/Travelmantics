@@ -52,10 +52,9 @@ public  class FirebaseUtil {
 
             };
         }
+            //instruction to create new array list is called each time the class is called
             mDeals = new ArrayList<TravelDeal>();
             mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
-
-
     }
     private static void signIn(){
         //From the firebase UI

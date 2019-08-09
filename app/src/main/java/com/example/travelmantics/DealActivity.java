@@ -1,5 +1,6 @@
 package com.example.travelmantics;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ public class DealActivity extends AppCompatActivity {
     EditText editTitle;
     EditText editDescription;
     EditText editPrice;
+    TravelDeal deal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,19 @@ public class DealActivity extends AppCompatActivity {
         editTitle = (EditText) findViewById(R.id.editTitle);
         editDescription = (EditText) findViewById(R.id.editDescription);
         editPrice = (EditText) findViewById(R.id.editPrice);
+
+        //show the deal activity class to user for editing purposes
+        Intent intent = getIntent();
+        TravelDeal deal = (TravelDeal) intent.getSerializableExtra("Deal");
+        if (deal == null) {
+            deal = new TravelDeal();
+        }
+        this.deal = deal;
+
+        //setting up the title,price and description for editing, if travel deal is empty new will be created
+        editTitle.setText(deal.getTitle());
+        editDescription.setText(deal.getDescription());
+        editPrice.setText(deal.getPrice());
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -42,7 +57,13 @@ public class DealActivity extends AppCompatActivity {
                 saveDeal();
                 Toast.makeText(this, "Deal saved", Toast.LENGTH_LONG).show();
                 clean();
-                //backToList();
+                backToList();
+                return true;
+
+            case R.id.delete_menu:
+                deleteDeal();
+                Toast.makeText(this, "Deal has been Deleted", Toast.LENGTH_LONG).show();
+                backToList();
                 return true;
             //set default to return to the main class
             default:
@@ -58,29 +79,56 @@ public class DealActivity extends AppCompatActivity {
         return true;
     }
 
-
+    //method to save new deal and edit deal if it already exists
     private void saveDeal() {
 
-        String title= editTitle.getText().toString();
-        String description= editDescription.getText().toString();
-        String price= editPrice.getText().toString();
+        //String title= editTitle.getText().toString();
+        //String description= editDescription.getText().toString();
+        //String price= editPrice.getText().toString();
 
         //creating new travel deal
-        TravelDeal deal = new TravelDeal(title,description,price, "" );
 
-        //inserting new record to database
+        //TravelDeal deal = new TravelDeal(title,description,price, "" );
 
-        mDatabaseReference.push().setValue(deal);
+        //Instead of using strings we use the Travel deal object for the three values
+        deal.setTitle(editTitle.getText().toString());
+        deal.setDescription(editDescription.getText().toString());
+        deal.setPrice(editPrice.getText().toString());
 
+        //checking if its a new deal or existing
+        //if its new use push to insert record to realtime else get id of the deal and edit using
+        if (deal.getId() == null) {
+            mDatabaseReference.push().setValue(deal);
+        } else {
+            mDatabaseReference.child(deal.getId()).setValue(deal);
+        }
     }
 
-    private void clean() {
-        editTitle.setText("");
-        editPrice.setText("");
-        editDescription.setText("");
-        editTitle.requestFocus();
+    //method to delete deal
+    //if there is no deal the a msg will be displayed to user otherwise its deleted
+    private void deleteDeal() {
+        if (deal == null) {
+            Toast.makeText(this, "Please save the deal before deleting", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mDatabaseReference.child(deal.getId()).removeValue();
     }
-}
+
+    //method to return to list activity after saving
+
+    private void backToList() {
+        Intent intent = new Intent(this, ListActivity.class);
+        startActivity(intent);
+    }
+
+        private void clean () {
+            editTitle.setText("");
+            editPrice.setText("");
+            editDescription.setText("");
+            editTitle.requestFocus();
+        }
+    }
+
 
 //package com.example.travelmantics;
 //
