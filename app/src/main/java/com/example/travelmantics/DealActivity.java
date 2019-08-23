@@ -76,6 +76,17 @@ public class DealActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
+
+        if (FirebaseUtil.isAdmin) {
+            menu.findItem(R.id.delete_menu).setVisible(true);
+            menu.findItem(R.id.save_menu).setVisible(true);
+            enableEditTexts(true);
+        }
+        else {
+            menu.findItem(R.id.delete_menu).setVisible(false);
+            menu.findItem(R.id.save_menu).setVisible(false);
+            enableEditTexts(false);
+        }
         return true;
     }
 
@@ -127,20 +138,9 @@ public class DealActivity extends AppCompatActivity {
             editDescription.setText("");
             editTitle.requestFocus();
         }
+    private void enableEditTexts(boolean isEnabled) {
+        editTitle.setEnabled(isEnabled);
+        editDescription.setEnabled(isEnabled);
+        editPrice.setEnabled(isEnabled);
     }
-
-
-//package com.example.travelmantics;
-//
-//import androidx.appcompat.app.AppCompatActivity;
-//
-//import android.os.Bundle;
-//
-//public class DealActivity extends AppCompatActivity {
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//    }
-//}
+    }
